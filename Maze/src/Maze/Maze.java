@@ -9,12 +9,15 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Random;
+import java.util.Stack;
 
 public class Maze {
 	private Cell[][] maze;
 	private int startCol;
 	private int endCol;
 	private int size;
+	Stack<Cell> unvisitedCells;
 
 	// Konstruktorn som tar från file
 	public Maze(String file) throws IOException {
@@ -39,9 +42,9 @@ public class Maze {
 		while (line != null) {
 			for (char c : line.toCharArray()) {
 				switch (c) {
-					case '#': maze[row][col] = new Cell(row, col, true);
+					case '#': maze[row][col] = new Cell(row, col, true, false);
 										break;
-					case ' ': maze[row][col] = new Cell(row, col, false);
+					case ' ': maze[row][col] = new Cell(row, col, false, false);
 										break;
 				}
 				col++;
@@ -66,27 +69,17 @@ public class Maze {
 			}
 		}
 
-		// Construct all inner neighbour relationships
-		for (row = 1; row < size - 1; row ++) {
-			for (col = 1; col < size - 1; col++) {
+		BuildNeighbourRelations();
 
-				// North
-				maze[row][col].setNeighbour(0, maze[row - 1][col]);
+	}
 
-				// West
-				maze[row][col].setNeighbour(1, maze[row][col + 1]);
+	public Maze(int size) {
+		// Genererar en labyrint av storlek size
+		this.size = size;
+		maze = new Cell[size][size];
 
-				//South
-				maze[row][col].setNeighbour(2, maze[row + 1][col]);
-
-				// East
-				maze[row][col].setNeighbour(3, maze[row][col - 1]);
-			}
-		}
-		
-		// Construct the neighbour relations for start and end cells
-		getStartCell().setNeighbour(2, maze[1][startCol]);
-		getEndCell().setNeighbour(0, maze[size - 2][endCol]);
+		initialize();
+		//generate();
 	}
 
 	public void	print() {
@@ -95,7 +88,7 @@ public class Maze {
 				if (maze[i][j].isWall()) {
 					System.out.print("#");
 				} else {
-					System.out.print(" ");
+					System.out.print(".");
 				}
 
 			}
@@ -123,19 +116,96 @@ public class Maze {
 		return maze[size - 1][endCol];
 	}
 
-	public static void main(String[] args) throws IOException {
-		Maze myMaze = new Maze("resources/Maze2.txt");
-		TurnLeft tl = new TurnLeft();
-		
-		myMaze.print();
-		
-		tl.solvePrinting(myMaze);
-		
-		System.out.println(tl.nrOfVisitedNodes());
-			
-		
+	private void initialize(){
+		unvisitedCells = new Stack<Cell>();
 
-		
+		// Initialize all edge cells as walls and all others as non-walls.
+		// Also adds the cells to the stack.
+		for (int row = 0; row < size; row++) {
+			for (int col = 0; col < size; col++) {
+				if (row == 0 || col == 0) {
+					maze[row][col] = new Cell(row, col, true, true);
+				}
+				if (row == (size - 1) || col == size - 1) {
+					maze[row][col] = new Cell(row, col, true, true);
+				}
+				if (row != 0 && row != size - 1 && col != 0 && col != size - 1) {
+					maze[row][col] = new Cell(row, col, false, false);
+					unvisitedCells.add(maze[row][col]);
+				}
+			}
+		}
+		Random rnd = new Random();
+		this.startCol = rnd.nextInt((size - 1) / 2) * 2 + 1; // för att få ojämna tal.
+		this.endCol = rnd.nextInt((size - 1) / 2) * 2 + 1; // för att få ojämna tal.
+
+		maze[0][startCol].setWall(false);
+		maze[size - 1][endCol].setWall(false);
+
+	}
+
+	private void generate(){
+		Stack<Cell> path = new Stack<Cell>();
+
+		maze[0][startCol].setVisited(false); // sätt starten som obesökt
+		maze[size - 1][endCol].setVisited(false); // sätt målet som obesökt
+
+		// fyll stacken
+		for (int row = 0; row < size - 1; row++) {
+			for (int col = 0; col < size - 1; col++) {
+				if (!maze[row][col].isVisited()) {
+					unvisitedCells.add(maze[row][col]);
+				}
+			}
+		}
+
+		Cell current = getStartCell();
+
+		while (!unvisitedCells.isEmpty()) {
+			Cell unvisitedNeighbour = current.getRandomUnvisitedNeighbour();
+			if (unvisitedNeighbour != null) {
+				path.push(current);
+			}
+		}
+
+
+
+	}
+
+	private void BuildNeighbourRelations() {
+		// Construct all inner neighbour relationships (of length 1).
+		for (int row = 1; row < size - 1; row ++) {
+			for (int col = 1; col < size - 1; col++) {
+
+				// North
+				maze[row][col].setNeighbour(0, maze[row - 1][col]);
+
+				// West
+				maze[row][col].setNeighbour(1, maze[row][col + 1]);
+
+				//South
+				maze[row][col].setNeighbour(2, maze[row + 1][col]);
+
+				// East
+				maze[row][col].setNeighbour(3, maze[row][col - 1]);
+			}
+		}
+
+		// Construct the neighbour relations for start and end cells
+		getStartCell().setNeighbour(2, maze[1][startCol]);
+		getEndCell().setNeighbour(0, maze[size - 2][endCol]);
+	}
+
+	public static void main(String[] args) throws IOException {
+		//Maze myMaze = new Maze("resources/Maze2.txt");
+		Maze myMaze = new Maze(7);
+		TurnLeft tl = new TurnLeft();
+
+		myMaze.print();
+
+		tl.solvePrinting(myMaze);
+
+		System.out.println(tl.nrOfVisitedNodes());
 	}
 
 }

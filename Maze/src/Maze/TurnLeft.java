@@ -2,18 +2,18 @@ package Maze;
 
 import java.util.Stack;
 
-public class TurnLeft implements MazeRunner{
+public class TurnLeft implements IMazeRunner{
 	private int count;
-	
+
 	public TurnLeft() {
 		count = 0;
 	}
-	
+
 	@Override
   public void solve(Maze maze){
     System.out.println("Not yet implemented!");
   }
-  
+
   @Override
   public int nrOfVisitedNodes() {
   	return count;
@@ -23,7 +23,7 @@ public class TurnLeft implements MazeRunner{
     int heading = 2;
     int turn = 1;
 
-    
+
     boolean complete = false;
 
     Stack<Cell> stack = new Stack<Cell>();
@@ -62,8 +62,8 @@ public class TurnLeft implements MazeRunner{
         current = neighbours[heading];
       }
     }
-    
-    
+
+
   }
 
 
