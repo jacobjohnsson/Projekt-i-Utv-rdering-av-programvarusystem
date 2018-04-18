@@ -1,5 +1,6 @@
 package Maze;
 
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -26,8 +27,15 @@ public class Cell {
 	    visited = isVisited;
 	  }
 
-  public Cell[] getNeighbours() {
-    return neighbours;
+  public ArrayList<Cell> getNeighbours() {
+    ArrayList<Cell> neighbourList = new ArrayList<Cell>();
+    for (int i = 0; i < neighbours.length; i++) {
+      Cell current = neighbours[i];
+      if (current != null){
+        neighbourList.add(current);
+      }
+    }
+    return neighbourList;
   }
 
   public void setNeighbour(int x, Cell c) {
@@ -62,6 +70,33 @@ public class Cell {
 
   public void setWall(boolean isWall){
     this.isWall = isWall;
+  }
+
+  public int getRow(){
+    return row;
+  }
+
+  public int getCol(){
+    return col;
+  }
+
+
+  public int getRowBetween(Cell cell){
+    int result = row - cell.getRow();
+    if(result == 0){
+      return row;
+    } else {
+      return row + result/2;
+    }
+  }
+
+  public int getColBetween(Cell cell){
+    int result = col - cell.getCol();
+    if(result == 0){
+      return col;
+    } else {
+      return col + result/2;
+    }
   }
 
   @Override

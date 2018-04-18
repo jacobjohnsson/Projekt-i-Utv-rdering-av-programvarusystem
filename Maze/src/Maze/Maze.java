@@ -69,7 +69,7 @@ public class Maze {
 			}
 		}
 
-		BuildNeighbourRelations();
+		BuildTwoStepNeighbourRelations();
 
 	}
 
@@ -79,14 +79,14 @@ public class Maze {
 		maze = new Cell[size][size];
 
 		initialize();
-		//generate();
+		generate();
 	}
 
 	public void	print() {
 		for (int i = 0; i < maze.length; i++) {
 			for (int j = 0; j < maze.length; j++) {
 				if (maze[i][j].isWall()) {
-					System.out.print("#");
+					System.out.print("¤");
 				} else {
 					System.out.print(".");
 				}
@@ -119,7 +119,7 @@ public class Maze {
 	private void initialize(){
 		unvisitedCells = new Stack<Cell>();
 
-		// Initialize all edge cells as walls and all others as non-walls.
+		// Initialize all edge cells as visited walls and all others as unvisited walls.
 		// Also adds the cells to the stack.
 		for (int row = 0; row < size; row++) {
 			for (int col = 0; col < size; col++) {
@@ -130,7 +130,7 @@ public class Maze {
 					maze[row][col] = new Cell(row, col, true, true);
 				}
 				if (row != 0 && row != size - 1 && col != 0 && col != size - 1) {
-					maze[row][col] = new Cell(row, col, false, false);
+					maze[row][col] = new Cell(row, col, true, false);
 					unvisitedCells.add(maze[row][col]);
 				}
 			}
@@ -142,52 +142,67 @@ public class Maze {
 		maze[0][startCol].setWall(false);
 		maze[size - 1][endCol].setWall(false);
 
+		BuildTwoStepNeighbourRelations();
+
 	}
 
 	private void generate(){
 		Stack<Cell> path = new Stack<Cell>();
+		Cell startCell = maze[0][startCol];
 
-		maze[0][startCol].setVisited(false); // sätt starten som obesökt
+		startCell.setVisited(false); // sätt starten som obesökt
 		maze[size - 1][endCol].setVisited(false); // sätt målet som obesökt
+		System.out.println(startCell);
 
-		// fyll stacken
-		for (int row = 0; row < size - 1; row++) {
-			for (int col = 0; col < size - 1; col++) {
-				if (!maze[row][col].isVisited()) {
-					unvisitedCells.add(maze[row][col]);
+		startCell.setVisited(true);
+
+		DFS(startCell.getNeighbours().get(0), startCell);
+
+	}
+
+	private void DFS(Cell current, Cell prev){
+		print();
+		System.out.println();
+		current.setVisited(true);
+		current.setWall(false);
+		for (Cell cell: current.getNeighbours()) {
+			if (!cell.isVisited()) {
+				int row = cell.getRowBetween(current);
+				int col = cell.getColBetween(current);
+				if(row > 0 && row < size &&
+				 	 col > 0 && col < size){
+						maze[row][col].setWall(false);
+						DFS(cell, current);
 				}
 			}
 		}
 
-		Cell current = getStartCell();
-
-		while (!unvisitedCells.isEmpty()) {
-			Cell unvisitedNeighbour = current.getRandomUnvisitedNeighbour();
-			if (unvisitedNeighbour != null) {
-				path.push(current);
-			}
-		}
-
-
 
 	}
 
-	private void BuildNeighbourRelations() {
-		// Construct all inner neighbour relationships (of length 1).
+
+	// Använder hittills endast avståndet 1. Bör alltså bli mer sofistikerad.
+	private void BuildTwoStepNeighbourRelations() {
+		// Construct all inner neighbour relationships (of length 2).
 		for (int row = 1; row < size - 1; row ++) {
 			for (int col = 1; col < size - 1; col++) {
 
 				// North
-				maze[row][col].setNeighbour(0, maze[row - 1][col]);
-
+				if( row - 2 > 0) {
+					maze[row][col].setNeighbour(0, maze[row - 2][col]);
+				}
 				// West
-				maze[row][col].setNeighbour(1, maze[row][col + 1]);
-
+				if ( col + 2 < size - 1){
+					maze[row][col].setNeighbour(1, maze[row][col + 2]);
+				}
 				//South
-				maze[row][col].setNeighbour(2, maze[row + 1][col]);
-
+				if ( row + 2 < size - 1){
+					maze[row][col].setNeighbour(2, maze[row + 2][col]);
+				}
 				// East
-				maze[row][col].setNeighbour(3, maze[row][col - 1]);
+				if (col - 2 > 0){
+					maze[row][col].setNeighbour(3, maze[row][col - 2]);
+				}
 			}
 		}
 
@@ -198,14 +213,14 @@ public class Maze {
 
 	public static void main(String[] args) throws IOException {
 		//Maze myMaze = new Maze("resources/Maze2.txt");
-		Maze myMaze = new Maze(7);
-		TurnLeft tl = new TurnLeft();
+		Maze myMaze = new Maze(13);
+		//TurnLeft tl = new TurnLeft();
 
 		myMaze.print();
 
-		tl.solvePrinting(myMaze);
+		//tl.solvePrinting(myMaze);
 
-		System.out.println(tl.nrOfVisitedNodes());
+		//System.out.println(tl.nrOfVisitedNodes());
 	}
 
 }
