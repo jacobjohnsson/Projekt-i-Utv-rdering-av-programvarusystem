@@ -1,8 +1,8 @@
 package maze;
 
-public class BreadthFirstSearch extends MazeRunner {
+public class AStar extends MazeRunner {
 	
-	public BreadthFirstSearch(){
+	public AStar(){
 		super();
 	}
 

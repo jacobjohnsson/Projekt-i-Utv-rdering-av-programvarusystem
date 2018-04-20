@@ -9,9 +9,6 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Random;
 import java.util.Stack;
 
@@ -76,8 +73,9 @@ public class Maze {
 
 	}
 
+	// Genererar en kvadratisk labyrint av storlek size
 	public Maze(int size) {
-		// Genererar en labyrint av storlek size
+		
 		this.size = size;
 		maze = new Cell[size][size];
 
@@ -123,7 +121,6 @@ public class Maze {
 		unvisitedCells = new Stack<Cell>();
 
 		// Initialize all edge cells as visited walls and all others as unvisited walls.
-		// Also adds the cells to the stack.
 		for (int row = 0; row < size; row++) {
 			for (int col = 0; col < size; col++) {
 				if (row == 0 || col == 0) {
@@ -153,20 +150,18 @@ public class Maze {
 	private void generate(){
 
 		Cell startCell = maze[0][startCol];
-
-		startCell.setVisited(false); // sätt starten som obesökt
+		
 		maze[size - 1][endCol].setVisited(false); // sätt målet som obesökt
-		System.out.println(startCell);
 
 		startCell.setVisited(true);
 
 		DFS(startCell.getTwoStepNeighbours().get(0), startCell);
-		removeRandomWalls(size/5);
+		
+		removeRandomWalls(size/5); // Öpnna upp labyrinten för att möjligen ge flera lösningar
 		
 	}
 	
 	private void removeRandomWalls(int nbr){
-		// öppna upp labyrinten lite till så att det möjligtvis blir fler lösningar. 
 		for(int i = 1; i <= nbr; i++) {
 			Random rnd = new Random();
 			Cell rndCell = maze[rnd.nextInt(size - 2) + 1][rnd.nextInt(size - 2) + 1];
@@ -193,12 +188,8 @@ public class Maze {
 				}
 			}
 		}
-
-
 	}
 
-
-	// Använder hittills endast avståndet 1. Bör alltså bli mer sofistikerad.
 	private void BuildTwoStepNeighbourRelations() {
 		// Construct all inner neighbour relationships (of length 2).
 		for (int row = 1; row < size - 1; row ++) {
@@ -259,14 +250,14 @@ public class Maze {
 
 	public static void main(String[] args) throws IOException {
 		//Maze myMaze = new Maze("resources/Maze2.txt");
-		Maze myMaze = new Maze(21);
+		Maze myMaze = new Maze(7);
 		TurnLeft tl = new TurnLeft();
 
 		myMaze.print();
 
 		tl.solve(myMaze);
 
-		System.out.println(tl.nrOfVisitedNodes());
+		System.out.println(tl);
 	}
 
 }
