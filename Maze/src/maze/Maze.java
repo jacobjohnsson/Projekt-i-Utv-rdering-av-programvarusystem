@@ -75,7 +75,7 @@ public class Maze {
 
 	// Genererar en kvadratisk labyrint av storlek size
 	public Maze(int size) {
-		
+
 		this.size = size;
 		maze = new Cell[size][size];
 
@@ -87,9 +87,9 @@ public class Maze {
 		for (int i = 0; i < maze.length; i++) {
 			for (int j = 0; j < maze.length; j++) {
 				if (maze[i][j].isWall()) {
-					System.out.print("¤");
+					System.out.print("X");
 				} else {
-					System.out.print(".");
+					System.out.print("-");
 				}
 
 			}
@@ -116,7 +116,7 @@ public class Maze {
 	public Cell getEndCell() {
 		return maze[size - 1][endCol];
 	}
-	
+
 	private void initialize(){
 		unvisitedCells = new Stack<Cell>();
 
@@ -150,23 +150,23 @@ public class Maze {
 	private void generate(){
 
 		Cell startCell = maze[0][startCol];
-		
+
 		maze[size - 1][endCol].setVisited(false); // sätt målet som obesökt
 
 		startCell.setVisited(true);
 
 		DFS(startCell.getTwoStepNeighbours().get(0), startCell);
-		
+
 		removeRandomWalls(size/5); // Öpnna upp labyrinten för att möjligen ge flera lösningar
-		
+
 	}
-	
+
 	private void removeRandomWalls(int nbr){
 		for(int i = 1; i <= nbr; i++) {
 			Random rnd = new Random();
 			Cell rndCell = maze[rnd.nextInt(size - 2) + 1][rnd.nextInt(size - 2) + 1];
 			while(!rndCell.isWall()) {
-				rndCell = maze[rnd.nextInt(size - 2) + 1][rnd.nextInt(size - 2) + 1];  
+				rndCell = maze[rnd.nextInt(size - 2) + 1][rnd.nextInt(size - 2) + 1];
 			}
 			rndCell.setWall(false);
 		}
@@ -218,7 +218,7 @@ public class Maze {
 		getStartCell().setTwoStepNeighbour(2, maze[1][startCol]);
 		getEndCell().setTwoStepNeighbour(0, maze[size - 2][endCol]);
 	}
-	
+
 	private void BuildOneStepNeighbourRelations() {
 		// Construct all inner neighbour relationships (of length 1).
 		for (int row = 1; row < size - 1; row ++) {

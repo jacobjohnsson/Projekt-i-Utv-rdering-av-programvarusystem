@@ -27,69 +27,7 @@ public class Cell {
 
   public void setVisited(boolean isVisited) {
 	    visited = isVisited;
-	  }
-
-  public Cell[] getOneStepNeighboursArray() {
-    return oneStepNeighbours;
-  }
-
-  public ArrayList<Cell> getTwoStepNeighbours() {
-    ArrayList<Cell> neighbourList = new ArrayList<Cell>();
-    for (int i = 0; i < twoStepNeighbours.length; i++) {
-      Cell current = twoStepNeighbours[i];
-      if (current != null){
-        neighbourList.add(current);
-      }
-    }
-    return neighbourList;
-  }
-
-  public ArrayList<Cell> getRandomNeighbours() {
-    ArrayList<Cell> randomList = new ArrayList<Cell>();
-    ArrayList<Cell> neighbourList = getTwoStepNeighbours();
-    Random rnd = new Random();
-
-    while (neighbourList.size() > 0) {
-      randomList.add(neighbourList.remove(rnd.nextInt(neighbourList.size())));
-    }
-    return randomList;
-  }
-
-
-
-  public void setTwoStepNeighbour(int x, Cell c) {
-	  if (x >= 0 && x < 4) {
-		  twoStepNeighbours[x] = c;
-	  } else {
-		  throw new IllegalArgumentException();
-	  }
-  }
-
-  public void setOneStepNeighbour(int x, Cell c) {
-	  if (x >= 0 && x < 4) {
-		  oneStepNeighbours[x] = c;
-	  } else {
-		  throw new IllegalArgumentException();
-	  }
-  }
-
-  // returns null if no such neighbour exists.
-  public Cell getRandomUnvisitedNeighbour(){
-    ArrayList<Cell> unvisitedNeighbours = new ArrayList<Cell>();
-    Random rnd = new Random();
-
-    for (Cell cell : twoStepNeighbours) {
-      if (!cell.isVisited()) {
-        unvisitedNeighbours.add(cell);
-      }
-    }
-
-    if (unvisitedNeighbours.size() == 0) {
-      return null;
-    }
-
-    return unvisitedNeighbours.get(rnd.nextInt(unvisitedNeighbours.size()));
-  }
+	}
 
   public boolean isWall(){
     return isWall;
@@ -106,7 +44,6 @@ public class Cell {
   public int getCol(){
     return col;
   }
-
 
   public int getRowBetween(Cell cell){
     return (row + cell.getRow()) / 2;
@@ -126,6 +63,66 @@ public class Cell {
       return row == cell.row && col == cell.col;
     }
     return false;
+  }
+
+  public Cell[] getOneStepNeighboursArray() {
+    return oneStepNeighbours;
+  }
+
+  public void setOneStepNeighbour(int x, Cell c) {
+    if (x >= 0 && x < 4) {
+      oneStepNeighbours[x] = c;
+    } else {
+      throw new IllegalArgumentException();
+    }
+  }
+
+  public ArrayList<Cell> getTwoStepNeighbours() {
+    ArrayList<Cell> neighbourList = new ArrayList<Cell>();
+    for (int i = 0; i < twoStepNeighbours.length; i++) {
+      Cell current = twoStepNeighbours[i];
+      if (current != null){
+        neighbourList.add(current);
+      }
+    }
+    return neighbourList;
+  }
+
+  public void setTwoStepNeighbour(int x, Cell c) {
+    if (x >= 0 && x < 4) {
+      twoStepNeighbours[x] = c;
+    } else {
+      throw new IllegalArgumentException();
+    }
+  }
+
+  public ArrayList<Cell> getRandomNeighbours() {
+    ArrayList<Cell> randomList = new ArrayList<Cell>();
+    ArrayList<Cell> neighbourList = getTwoStepNeighbours();
+    Random rnd = new Random();
+
+    while (neighbourList.size() > 0) {
+      randomList.add(neighbourList.remove(rnd.nextInt(neighbourList.size())));
+    }
+    return randomList;
+  }
+
+  // returns null if no such neighbour exists.
+  public Cell getRandomUnvisitedNeighbour(){
+    ArrayList<Cell> unvisitedNeighbours = new ArrayList<Cell>();
+    Random rnd = new Random();
+
+    for (Cell cell : twoStepNeighbours) {
+      if (!cell.isVisited()) {
+        unvisitedNeighbours.add(cell);
+      }
+    }
+
+    if (unvisitedNeighbours.size() == 0) {
+      return null;
+    }
+
+    return unvisitedNeighbours.get(rnd.nextInt(unvisitedNeighbours.size()));
   }
 
   public String toString() {

@@ -25,15 +25,16 @@ public class TurnLeft extends MazeRunner{
         complete = true;
         return;
       }
-      
+
       count++;
 
       Cell[] neighbours = current.getOneStepNeighboursArray();
 
+			// Framåt
       if (neighbours[Math.floorMod(heading - turn, 4)].isWall() == false) {
         heading = Math.floorMod(heading - turn, 4);
         current = neighbours[Math.floorMod(heading, 4)];
-      } else if (neighbours[Math.floorMod(heading, 4)].isWall() == false) {
+    	} else if (neighbours[Math.floorMod(heading, 4)].isWall() == false) {
         current = neighbours[Math.floorMod(heading, 4)];
       } else if (neighbours[Math.floorMod(heading + turn, 4)].isWall() == false) {
         heading = Math.floorMod(heading + turn, 4);
