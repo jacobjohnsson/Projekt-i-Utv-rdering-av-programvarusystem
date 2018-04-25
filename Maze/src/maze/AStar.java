@@ -1,4 +1,4 @@
-// Frågor? Hör med Jacob.
+// Frågor? Hör med Jacob. hejhej
 
 package maze;
 
@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
+import java.util.TreeMap;
 
 public class AStar {
 	private boolean complete;
@@ -30,10 +31,10 @@ public class AStar {
 		TreeCell endCell = tMaze.getEndCell();
 
 		// Totala kostnaden från start till end genom denna cell. Komparatorn jämför avståndet från startcellen och avständet till slutcellen. Innehåller endast "aktiva" celler.
-		private PriorityQueue<TreeCell> fscore =
-			new PriorityQueue<TreeCell> ((c1, c2) ->
-				c1.getHeuristicValue(c1, endCell) + gScore.get(c1) <
-				c2.getHeuristicValue(c2, endCell) + gScore.get(c2));
+		//TreeMap<TreeCell, Double> fscore =
+		//	new TreeMap<TreeCell, Double> ((c1, c2) ->
+		//		getHeuristicValue(c1, endCell) + gScore.get(c1) <
+		//		getHeuristicValue(c2, endCell) + gScore.get(c2));
 
 
 		// Lägg till startCellen i mängden "aktiva" celler.
@@ -43,43 +44,43 @@ public class AStar {
 		gScore.put(startCell, 0);
 
 		// Kostnaden från start till end är pyth.
-		fScore.add(startCell);
+		//fScore.add(startCell);
 
 		while (!openSet.isEmpty()) {
 
 			// Flytta rund den nuvarande cellen i alla mängder och heapar.
-			TreeCell current = fScore.poll();
-			openSet.remove(current);
-			closedSet.add(current);
+			//TreeCell current = fScore.poll();
+			//openSet.remove(current);
+			//closedSet.add(current);
 
-			if (current == endCell){
-				complete = true;
-			}
+			//if (current == endCell){
+			//	complete = true;
+			//}
 
-			for (TreeCell neighbour : current.getNeighbours()) {
+			//for (TreeCell neighbour : current.getNeighbours()) {
 				// if closedSet.contains(neighbour){
 				//
 				// }
 
 				// Hey! Vi hittade en hittills obesökt cell!
-				if (!openSet.contains(current)) {
-					openSet.add(neighbour);
-				}
+				//if (!openSet.contains(current)) {
+				//	openSet.add(neighbour);
+				//}
 
 				// Avståndet från start till denna grannen.
-				Double tentativeGScore = gScore.get(current) + distBetween(current, neighbour);
+				//Integer tentativeGScore = gScore.get(current) + distBetween(current, neighbour);
 
-				if (tentativeGScore >= gScore.get(neighbour)) {
+				//if (tentativeGScore >= gScore.get(neighbour)) {
 					// Då är detta in en närmare väg.
-					continue;
-				}
+				//	continue;
+				//}
 
 				// Detta är den hittills bästa vägen till denna cellen!
-				cameFrom.add(neighbour, current);
-				gScore.add(neighbour, tentativeGScore);
-				fScore
+				//cameFrom.put(neighbour, current);
+				//gScore.put(neighbour, tentativeGScore);
+				
 
-			}
+			//}
 		}
 
 	}
@@ -89,6 +90,10 @@ public class AStar {
 		return Math.sqrt(
 						Math.pow(current.getRow() - endCell.getRow(), 2) +
 						Math.pow(current.getCol() - endCell.getCol(), 2));
+	}
+	
+	public Integer distBetween(TreeCell c1, TreeCell c2){
+		return 0;
 	}
 
 

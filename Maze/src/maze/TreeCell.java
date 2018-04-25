@@ -50,7 +50,7 @@ public class TreeCell {
 	}
 
 	//TODO
-	public ArrdayList<TreeCell> getNeighbours(){
+	public ArrayList<TreeCell> getNeighbours(){
 		return null;
 	}
 
