@@ -20,7 +20,8 @@ public class BreadthFirstSearch extends MazeRunner {
 
 	@Override
 	public void solve(Maze maze) {
-		// TODO Auto-generated method stub
+		Cell startCell = maze.getStartCell();
+		Cell endCell = maze.getEndCell();
 
 	}
 
