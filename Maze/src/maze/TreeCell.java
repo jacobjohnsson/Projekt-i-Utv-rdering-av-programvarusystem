@@ -8,7 +8,7 @@ public class TreeCell {
 	private int row;
 	private boolean visited;
 	private ArrayList<TreeCell> neighbours; //Non-weighted neighbours
-	private PriorityQueue<TreeCell> closestNeighbours; 
+	private PriorityQueue<TreeCell> closestNeighbours;
 	private int distance;
 	private int weightedDistance;
 
@@ -49,6 +49,11 @@ public class TreeCell {
 		return col;
 	}
 
+	//TODO
+	public ArrdayList<TreeCell> getNeighbours(){
+		return null;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (o == this) {
@@ -59,6 +64,11 @@ public class TreeCell {
 			return row == treeCell.row && col == treeCell.col;
 		}
 		return false;
+	}
+
+	@Override
+	public int hashCode(){
+		return ((Integer)(row + col)).hashCode();
 	}
 
 }
