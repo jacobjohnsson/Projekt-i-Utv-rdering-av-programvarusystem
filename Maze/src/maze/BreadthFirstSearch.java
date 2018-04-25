@@ -4,18 +4,18 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Set;
 import java.util.HashSet;
-import java.util.TreeMap;
+
 
 public class BreadthFirstSearch extends MazeRunner {
-	private Set<TreeCell> closedSet;
-	private Set<TreeCell> openSet;
-	private List<TreeCell> graph;
+	private Set<Cell> closedSet;
+	private Set<Cell> openSet;
+	private List<Cell> graph;
 
 	public BreadthFirstSearch(){
 		super();
-		closedSet = new HashSet<TreeCell>();
-		openSet = new HashSet<TreeCell>();
-		graph = new LinkedList<TreeCell>();
+		closedSet = new HashSet<Cell>();
+		openSet = new HashSet<Cell>();
+		graph = new LinkedList<Cell>();
 	}
 
 	@Override
