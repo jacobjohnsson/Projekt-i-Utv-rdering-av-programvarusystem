@@ -30,7 +30,6 @@ public class TreeCell {
 		neighbours = new ArrayList<TreeCell>();
 		distance = 0;
 		weightedDistance = 0;
-
 	}
 
 	public boolean isVisited() {
@@ -49,9 +48,8 @@ public class TreeCell {
 		return col;
 	}
 
-	//TODO
 	public ArrayList<TreeCell> getNeighbours(){
-		return null;
+		return neighbours;
 	}
 
 	@Override
